@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,12 +35,15 @@ import com.revature.foodorderingsystem.service.BillingStatementService;
 @RequestMapping("/billingStatements")
 public class BillingStatementController 
 {
+	private static Logger log = LoggerFactory.getLogger(BillingStatementController.class);
+	
 	@Autowired
 	BillingStatementService service;
 	
 	@GetMapping("/billingStatements")
 	public List<BillingStatement> getAllBillingStatements() 
 	{
+		log.info("In getAllBillingStatements()");
 		return service.getAllBillingStatements();
 
 	}
@@ -47,6 +52,7 @@ public class BillingStatementController
 	public ResponseEntity<BillingStatement> editBillingStatementById(@PathVariable(value = "id") Long id, @Valid @RequestBody BillingStatement  billingStatementDetails) 
 							throws RecordNotFoundException 
 	{
+		log.info("In editBillingStatementById()");
 		BillingStatement billingStatement = service.getBillingStatementById(id);
 		
 		billingStatement.setExtendedPrice(billingStatementDetails.getExtendedPrice());
@@ -62,6 +68,7 @@ public class BillingStatementController
 	public Map<String, Boolean> deleteBillingStatementById(Model model, @PathVariable("id") Long id) 
 							throws RecordNotFoundException 
 	{
+		log.info("In deleteBillingStatementById()");
 		service.deleteBillingStatementById(id);
 		
 		Map<String, Boolean> response = new HashMap<>();
@@ -72,6 +79,7 @@ public class BillingStatementController
 	@PostMapping(path = "/createBillingStatement")
 	public BillingStatement createBillingStatement(@Valid @RequestBody BillingStatement billingStatement) 
 	{
+		log.info("In createBillingStatement()");
 		return service.createOrUpdateBillingStatement(billingStatement);
 	}
 }

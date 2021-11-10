@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.revature.foodorderingsystem.controller.CustomerController;
 import com.revature.foodorderingsystem.exception.RecordNotFoundException;
 import com.revature.foodorderingsystem.model.BillingStatement;
 import com.revature.foodorderingsystem.repository.BillingStatementRepository;
@@ -15,11 +18,14 @@ import com.revature.foodorderingsystem.repository.BillingStatementRepository;
 @Service
 public class BillingStatementService {
 	
+	private static Logger log = LoggerFactory.getLogger(BillingStatementService.class);
+	
 	@Autowired
 	BillingStatementRepository repository;
 	
 	public List<BillingStatement> getAllBillingStatements()
 	{
+		log.info("In getAllBillingStatements()");
 		List<BillingStatement> result = (List<BillingStatement>) repository.findAll();
 		
 		if(result.size() > 0) {
@@ -31,17 +37,20 @@ public class BillingStatementService {
 	
 	public BillingStatement getBillingStatementById(Long id) throws RecordNotFoundException 
 	{
+		log.info("In getBillingStatementById()");
 		Optional<BillingStatement> billingStatement = repository.findById(id);
 		
 		if(billingStatement.isPresent()) {
 			return billingStatement.get();
 		} else {
+			log.info("RecordNotFoundException");
 			throw new RecordNotFoundException("No billing statement record exist for given id");
 		}
 	}
 	
 	public BillingStatement createOrUpdateBillingStatement(BillingStatement entity) 
 	{
+		log.info("In createOrUpdateBillingStatement()");
 		if(Objects.isNull(entity.getId())) 
 		{
 			entity = repository.save(entity);
@@ -74,12 +83,14 @@ public class BillingStatementService {
 	
 	public void deleteBillingStatementById(Long id) throws RecordNotFoundException 
 	{
+		log.info("In deleteBillingStatementById()");
 		Optional<BillingStatement> listItem = repository.findById(id);
 		
 		if(listItem.isPresent()) 
 		{
 			repository.deleteById(id);
 		} else {
+			log.info("RecordNotFoundException");
 			throw new RecordNotFoundException("No billing statement record exist for given id");
 		}
 	} 

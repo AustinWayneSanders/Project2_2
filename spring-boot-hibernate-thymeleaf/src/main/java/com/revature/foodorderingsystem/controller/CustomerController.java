@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,8 @@ import com.revature.foodorderingsystem.service.CustomerService;
 @RequestMapping("/customers")
 public class CustomerController 
 {
+	private static Logger log = LoggerFactory.getLogger(CustomerController.class);
+	
 	@Autowired
 	CustomerService service;
 	
@@ -48,6 +52,8 @@ public class CustomerController
 	public ResponseEntity<Customer> editCustomerById(@PathVariable(value = "id") Long id, @Valid @RequestBody Customer customerDetails) 
 							throws RecordNotFoundException 
 	{
+		log.info("In editCustomerById()");
+		
 		Customer customer = service.getCustomerById(id);
 		
 		customer.setFirstName(customerDetails.getFirstName());
@@ -63,6 +69,7 @@ public class CustomerController
 	public Map<String, Boolean> deleteBillingStatementById(Model model, @PathVariable("id") Long id) 
 							throws RecordNotFoundException 
 	{
+		log.info("In deleteBillingStatementById()");
 		service.deleteCustomerById(id);
 		
 		Map<String, Boolean> response = new HashMap<>();
@@ -73,6 +80,7 @@ public class CustomerController
 	@PostMapping(path = "/createCustomer")
 	public Customer createCustomer(@Valid @RequestBody Customer customer) 
 	{
+		log.info("In createCustomer()");
 		return service.createOrUpdateCustomer(customer);
 	}
 }

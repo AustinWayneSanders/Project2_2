@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.revature.foodorderingsystem.controller.CustomerController;
 import com.revature.foodorderingsystem.exception.RecordNotFoundException;
 import com.revature.foodorderingsystem.model.Customer;
 import com.revature.foodorderingsystem.repository.CustomerRepository;
@@ -15,11 +18,14 @@ import com.revature.foodorderingsystem.repository.CustomerRepository;
 @Service
 public class CustomerService {
 	
+	private static Logger log = LoggerFactory.getLogger(CustomerService.class);
+	
 	@Autowired
 	CustomerRepository repository;
 	
 	public List<Customer> getAllCustomers()
 	{
+		log.info("In getAllCustomers()");
 		List<Customer> result = (List<Customer>) repository.findAll();
 		
 		if(result.size() > 0) {
@@ -31,17 +37,20 @@ public class CustomerService {
 	
 	public Customer getCustomerById(Long id) throws RecordNotFoundException 
 	{
+		log.info("In getCustomerById()");
 		Optional<Customer> customer = repository.findById(id);
 		
 		if(customer.isPresent()) {
 			return customer.get();
 		} else {
+			log.info("RecordNotFoundException");
 			throw new RecordNotFoundException("No customer record exist for given id");
 		}
 	}
 	
 	public Customer createOrUpdateCustomer(Customer entity) 
 	{
+		log.info("In createOrUpdateCustomer()");
 		if(Objects.isNull(entity.getId())) 
 		{
 			entity = repository.save(entity);
@@ -74,12 +83,14 @@ public class CustomerService {
 	
 	public void deleteCustomerById(Long id) throws RecordNotFoundException 
 	{
+		log.info("In deleteCustomerById()");
 		Optional<Customer> customer = repository.findById(id);
 		
 		if(customer.isPresent()) 
 		{
 			repository.deleteById(id);
 		} else {
+			log.info("RecordNotFoundException");
 			throw new RecordNotFoundException("No customer record exist for given id");
 		}
 	} 
