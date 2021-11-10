@@ -23,7 +23,7 @@ import javax.persistence.Table;
 public class BillingStatement implements Serializable{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "billingstatement_id")
 	private long id;
 

@@ -29,7 +29,7 @@ import com.revature.foodorderingsystem.service.BillingStatementService;
 import com.revature.foodorderingsystem.service.CustomerService;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/customers")
 public class CustomerController 
@@ -44,16 +44,22 @@ public class CustomerController
 
 	}
 			
-	@PutMapping(path = {"/customers/{id}"})
-	public ResponseEntity<Customer> editCustomerById(@PathVariable(value = "id") Long id) 
+	@PutMapping(path = {"/editCustomer/{id}"})
+	public ResponseEntity<Customer> editCustomerById(@PathVariable(value = "id") Long id, @Valid @RequestBody Customer customerDetails) 
 							throws RecordNotFoundException 
 	{
 		Customer customer = service.getCustomerById(id);
-		service.createOrUpdateCustomer(customer);
-		return ResponseEntity.ok(customer);
+		
+		customer.setFirstName(customerDetails.getFirstName());
+		customer.setLastName(customerDetails.getLastName());
+		customer.setEmail(customerDetails.getEmail());
+		customer.setUserName(customerDetails.getUserName());
+		customer.setPassword(customerDetails.getPassword());
+		final Customer updateCustomer = service.createOrUpdateCustomer(customer);
+		return ResponseEntity.ok(updateCustomer);
 	}
 	
-	@DeleteMapping(path = "customers/{id}")
+	@DeleteMapping(path = "deleteCustomer/{id}")
 	public Map<String, Boolean> deleteBillingStatementById(Model model, @PathVariable("id") Long id) 
 							throws RecordNotFoundException 
 	{

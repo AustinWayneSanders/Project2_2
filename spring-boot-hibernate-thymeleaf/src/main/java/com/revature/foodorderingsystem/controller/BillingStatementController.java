@@ -24,10 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.foodorderingsystem.exception.RecordNotFoundException;
 import com.revature.foodorderingsystem.model.BillingStatement;
+import com.revature.foodorderingsystem.model.Customer;
 import com.revature.foodorderingsystem.service.BillingStatementService;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/billingStatements")
 public class BillingStatementController 
@@ -42,16 +43,22 @@ public class BillingStatementController
 
 	}
 			
-	@PutMapping(path = {"/billingStatements/{id}"})
-	public ResponseEntity<BillingStatement> editBillingStatementById(@PathVariable(value = "id") Long id) 
+	@PutMapping(path = {"/editBillingStatement/{id}"})
+	public ResponseEntity<BillingStatement> editBillingStatementById(@PathVariable(value = "id") Long id, @Valid @RequestBody BillingStatement  billingStatementDetails) 
 							throws RecordNotFoundException 
 	{
 		BillingStatement billingStatement = service.getBillingStatementById(id);
-		service.createOrUpdateBillingStatement(billingStatement);
-		return ResponseEntity.ok(billingStatement);
+		
+		billingStatement.setExtendedPrice(billingStatementDetails.getExtendedPrice());
+		billingStatement.setProductName(billingStatementDetails.getProductName());
+		billingStatement.setRestaurantName(billingStatementDetails.getRestaurantName());
+		billingStatement.setUnitPrice(billingStatementDetails.getUnitPrice());
+		
+		final BillingStatement updateBillingStatement = service.createOrUpdateBillingStatement(billingStatement);
+		return ResponseEntity.ok(updateBillingStatement);
 	}
 	
-	@DeleteMapping(path = "/billingStatements/{id}")
+	@DeleteMapping(path = "/deleteBillingStatement/{id}")
 	public Map<String, Boolean> deleteBillingStatementById(Model model, @PathVariable("id") Long id) 
 							throws RecordNotFoundException 
 	{
