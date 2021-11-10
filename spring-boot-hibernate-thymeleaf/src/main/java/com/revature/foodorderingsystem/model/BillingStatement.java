@@ -17,7 +17,7 @@ import lombok.Data;
 public class BillingStatement implements Serializable{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "billingstatement_id")
 	private long id;
 
