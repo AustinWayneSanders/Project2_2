@@ -80,7 +80,7 @@ public class BillingStatementService {
 		{
 			repository.deleteById(id);
 		} else {
-			throw new RecordNotFoundException("No list item record exist for given id");
+			throw new RecordNotFoundException("No billing statement record exist for given id");
 		}
 	} 
 }

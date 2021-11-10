@@ -36,7 +36,7 @@ public class BillingStatementController
 	BillingStatementService service;
 	
 	@GetMapping("/billingStatements")
-	public List<BillingStatement> getAllProducts() 
+	public List<BillingStatement> getAllBillingStatements() 
 	{
 		return service.getAllBillingStatements();
 
