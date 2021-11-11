@@ -49,7 +49,7 @@ public class CustomerController
 	}
 	
 	@GetMapping("/getCustomerByUserName/{userName}")
-	public Customer getCustomerByUserName(@PathVariable String userName) {
+	public Customer getCustomerByUserName(@PathVariable String userName) throws RecordNotFoundException {
 		return service.getCustomerByUserName(userName);
 	}
 			

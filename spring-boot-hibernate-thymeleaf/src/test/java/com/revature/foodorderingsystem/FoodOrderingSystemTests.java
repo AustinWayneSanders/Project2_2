@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.revature.foodorderingsystem.controllerstest.BillingStatementControllerTest;
 import com.revature.foodorderingsystem.controllerstest.CustomerControllerTest;
@@ -16,8 +15,8 @@ import com.revature.foodorderingsystem.servicetests.CustomerServiceTest;
 @RunWith(Suite.class)
 @SpringBootTest
 @Suite.SuiteClasses({
-    //BillingStatementControllerTest.class, 
-    //CustomerControllerTest.class,
+    BillingStatementControllerTest.class, 
+    CustomerControllerTest.class,
     BillingStatementServiceTest.class,
     CustomerServiceTest.class,
     BillingStatementRepositoryTest.class,

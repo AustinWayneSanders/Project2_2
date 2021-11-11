@@ -168,5 +168,20 @@ public class CustomerServiceTest {
       		Assert.assertEquals(e.getMessage(), "No customer record exist for given id");
       	}
     }
+    
+    @Test
+    public void testGetCustomerByUserName() throws RecordNotFoundException {
+		List<Customer> customers = new ArrayList<Customer>();
+		customers.add(c1);
+		customers.add(c2);
+		
+		when(customerRepo.findAll()).thenReturn(customers);
+		
+		Customer result = customerService.getCustomerByUserName(c1.getUserName());
+		
+		Assert.assertEquals(result.toString(), c1.toString());
+		
+		
+    }
 }
 

@@ -33,6 +33,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.foodorderingsystem.controller.CustomerController;
+import com.revature.foodorderingsystem.exception.RecordNotFoundException;
 import com.revature.foodorderingsystem.model.Customer;
 import com.revature.foodorderingsystem.service.CustomerService;
 
@@ -129,6 +130,22 @@ public class CustomerControllerTest {
 		
 		Assert.assertTrue(response.getStatus() == HttpStatus.OK.value());
 		Assert.assertTrue(mockStmts.size() == 1);
+	}
+	
+	@Test
+	public void testGetCustomerByUserName() throws Exception {
+		Customer c2 = new Customer(2, "Chatita", "The Shy", "chatita@email.com", "chatita", "ihearttuna");
+		mockStmts.add(c2);
+		
+		when(service.getCustomerByUserName(c2.getUserName())).thenReturn(c2);
+		
+		MockHttpServletResponse response = mvc.perform(get("/customers/getCustomerByUserName/chatita")
+				.accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+		
+		System.out.println(response.getContentType());
+		System.out.println(response.getContentAsString());
+        Assert.assertTrue(response.getStatus() == HttpStatus.OK.value());
+        
 	}
 }
 
