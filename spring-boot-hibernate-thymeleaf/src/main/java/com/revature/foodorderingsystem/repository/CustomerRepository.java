@@ -8,5 +8,7 @@ import com.revature.foodorderingsystem.model.Customer;
 @Repository
 public interface CustomerRepository 
 			extends CrudRepository<Customer, Long> {
+	
+	public Customer findByUserName(String userName);
 
 }
