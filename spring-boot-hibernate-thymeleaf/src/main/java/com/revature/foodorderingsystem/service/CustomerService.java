@@ -93,6 +93,20 @@ public class CustomerService {
 			log.info("RecordNotFoundException");
 			throw new RecordNotFoundException("No customer record exist for given id");
 		}
+	}
+
+	public Customer getCustomerByUserName(String userName) throws RecordNotFoundException {
+		List<Customer> allCustomers = (List<Customer>) repository.findAll();
+		Customer result = null;
+		for( Customer c: allCustomers) {
+			if (c.getUserName().equals(userName)) {
+				result = c;
+			}
+		}
+		if (result == null) {
+			throw new RecordNotFoundException("No customer record exist for given user name");
+		}
+		return result;
 	} 
 }
 

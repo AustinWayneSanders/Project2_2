@@ -47,6 +47,11 @@ public class CustomerController
 		return service.getAllCustomers();
 
 	}
+	
+	@GetMapping("/getCustomerByUserName/{userName}")
+	public Customer getCustomerByUserName(@PathVariable String userName) {
+		return service.getCustomerByUserName(userName);
+	}
 			
 	@PutMapping(path = {"/editCustomer/{id}"})
 	public ResponseEntity<Customer> editCustomerById(@PathVariable(value = "id") Long id, @Valid @RequestBody Customer customerDetails) 
