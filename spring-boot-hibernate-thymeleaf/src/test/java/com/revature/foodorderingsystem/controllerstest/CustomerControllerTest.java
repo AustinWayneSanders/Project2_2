@@ -1,5 +1,6 @@
 package com.revature.foodorderingsystem.controllerstest;
 
+
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -31,33 +32,33 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.foodorderingsystem.controller.BillingStatementController;
-import com.revature.foodorderingsystem.model.BillingStatement;
-import com.revature.foodorderingsystem.service.BillingStatementService;
+import com.revature.foodorderingsystem.controller.CustomerController;
+import com.revature.foodorderingsystem.model.Customer;
+import com.revature.foodorderingsystem.service.CustomerService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @Rollback(false)
-public class BillingStatementControllerTest {
+public class CustomerControllerTest {
 
 	@Mock
-	private BillingStatementService service;
+	private CustomerService service;
 	@Autowired
 	private MockMvc mvc;
     @Autowired
     @InjectMocks
-    private BillingStatementController controller;
-    private JacksonTester<BillingStatement> json; 
-    private BillingStatement b1 = new BillingStatement(1, "Cosmic Cantina", "Deluxe Veggie Burrito", 2, 8.99, 17.98);
-    private List<BillingStatement> mockStmts = new ArrayList<>();
+    private CustomerController controller;
+    private JacksonTester<Customer> json; 
+    private Customer c1 = new Customer(1, "Edgar", "The Old Man", "edgrrrr@email.com", "edgrrrr", "grumpledore");
+    private List<Customer> mockStmts = new ArrayList<>();
     
     @Before
     public void setUp() {
     	MockitoAnnotations.initMocks(this);
     	JacksonTester.initFields(this, new ObjectMapper());
     	mvc = MockMvcBuilders.standaloneSetup(controller).build();
-        mockStmts.add(b1);
+        mockStmts.add(c1);
     }
 	
 	@Test
@@ -66,67 +67,68 @@ public class BillingStatementControllerTest {
 	}
 	
 	@Test
-	public void testGetAllBillingStatements() throws Exception {
-        when(service.getAllBillingStatements()).thenReturn(mockStmts);
-
+	public void testGetAllCustomers() throws Exception {
+        when(service.getAllCustomers()).thenReturn(mockStmts);
+        
         MockHttpServletResponse response = mvc.perform(
-        		get("/billingStatements/billingStatements")
+        		get("/customers/customers")
         		.accept(MediaType.APPLICATION_JSON))
         		.andReturn().getResponse();
+        
         Assert.assertTrue(response.getStatus() == HttpStatus.OK.value());
 	}
 	
 	@Test
-	public void testEditBillingStatementById() throws IOException, Exception {
-		when(service.getBillingStatementById((long) 1)).thenReturn(b1);
-		when(service.createOrUpdateBillingStatement(b1)).thenReturn(b1);
+	public void testEditCustomerById() throws IOException, Exception {
+		when(service.getCustomerById((long) 1)).thenReturn(c1);
+		when(service.createOrUpdateCustomer(c1)).thenReturn(c1);
 		
 		MockHttpServletResponse response = mvc.perform(
-				put("/billingStatements/editBillingStatement/1").contentType(MediaType.APPLICATION_JSON).content(
-				json.write(new BillingStatement(1, "Cosmic Caninta", "Quesadilla", 3, 5.25, 15.75)).getJson()))
+				put("/customers/editCustomer/1").contentType(MediaType.APPLICATION_JSON).content(
+				json.write(new Customer(1, "Edgar", "The Brave", "edgrrrr@email.com", "edgrrrr", "grumpledore")).getJson()))
 				.andReturn().getResponse();
-
-	    Assert.assertTrue(response.getStatus() == HttpStatus.CREATED.value() || response.getStatus() == HttpStatus.OK.value());
+		
+	    Assert.assertTrue(response.getStatus() == HttpStatus.CREATED.value()  || response.getStatus() == HttpStatus.OK.value());
 	}
 	
 	@Test
-	public void testCreateBillingStatment() throws IOException, Exception {
-		BillingStatement b2 = new BillingStatement(2, "IP3", "Cheese Pizza", 1, 16.50, 16.50);
+	public void testCreateCustomer() throws IOException, Exception {
+		Customer c2 = new Customer(2, "Chatita", "The Shy", "chatita@email.com", "chatita", "ihearttuna");
 
 		doAnswer(invocation -> {
-			mockStmts.add(b2);
-			return b2;
-		}).when(service).createOrUpdateBillingStatement(b2);
+			mockStmts.add(c2);
+			return c2;
+		}).when(service).createOrUpdateCustomer(c2);
 		
 		Assert.assertTrue(mockStmts.size() == 1);
 		
 		MockHttpServletResponse response = mvc.perform(
-				post("/billingStatements/createBillingStatement").contentType(MediaType.APPLICATION_JSON).content(
-				json.write(new BillingStatement(2, "IP3", "Cheese Pizza", 1, 16.50, 16.50)).getJson())).andReturn().getResponse();
+				post("/customers/createCustomer").contentType(MediaType.APPLICATION_JSON).content(
+				json.write(new Customer(2, "Chatita", "The Shy", "chatita@email.com", "chatita", "ihearttuna")).getJson())).andReturn().getResponse();
 		
 		Assert.assertTrue(response.getStatus() == HttpStatus.CREATED.value() || response.getStatus() == HttpStatus.OK.value());
 		Assert.assertTrue(mockStmts.size() == 2);
 		
-		mockStmts.remove(b2);
+		mockStmts.remove(c2);
 
 	}
 	
 	@Test
-	public void testDeleteBillingStatementById() throws Exception {
-		BillingStatement b2 = new BillingStatement(2, "IP3", "Cheese Pizza", 1, 16.50, 16.50);
-		mockStmts.add(b2);
-		
+	public void testDeleteCustomerById() throws Exception {
+		Customer c2 = new Customer(2, "Chatita", "The Shy", "chatita@email.com", "chatita", "ihearttuna");
+		mockStmts.add(c2);
 		doAnswer(invocation -> {
-			mockStmts.remove(1);
+			mockStmts.remove(0);
 			return mockStmts;
-		}).when(service).deleteBillingStatementById((long) 2);
+		}).when(service).deleteCustomerById((long) 1);
 		
 		Assert.assertTrue(mockStmts.size() == 2);
 		
 		MockHttpServletResponse response = mvc.perform(
-				 delete("/billingStatements/deleteBillingStatement/2")).andReturn().getResponse();
+				 delete("/customers/deleteCustomer/1")).andReturn().getResponse();
 		
 		Assert.assertTrue(response.getStatus() == HttpStatus.OK.value());
 		Assert.assertTrue(mockStmts.size() == 1);
 	}
 }
+

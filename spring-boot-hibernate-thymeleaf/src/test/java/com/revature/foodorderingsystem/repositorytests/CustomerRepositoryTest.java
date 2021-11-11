@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -19,29 +20,28 @@ import com.revature.foodorderingsystem.repository.CustomerRepository;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfiguration.class)
 @DataJpaTest
+@Rollback(false)
 public class CustomerRepositoryTest {
 	
 	@Autowired
 	private CustomerRepository customerRepo;
-	
-	private Customer customer;
+	private Customer customer = new Customer(1, "Holly", "Larsen", "hollar@email.com", "holly11", "l@r$3n");
 	
 	@Before
 	public void setUp() {
-		customer = new Customer(1, "Holly", "Larsen", "hollar@email.com", "holly11", "l@r$3n");
 		customerRepo.save(customer);
-	}
-	
-	@After
-	public void tearDown() {
-		customerRepo.delete(customer);
 	}
 	
 	@Test
 	public void createCustomer() {
 		Customer c = new Customer(2, "unit", "test", "unittest@email.com", "blah", "halb");
 		Customer result = customerRepo.save(c);
-		Assert.assertEquals(c.toString(), result.toString());
+		Assert.assertNotNull(result);
+		Assert.assertEquals(c.getFirstName(), result.getFirstName());
+		Assert.assertEquals(c.getLastName(), result.getLastName());
+		Assert.assertEquals(c.getEmail(), result.getEmail());
+		Assert.assertEquals(c.getUserName(), result.getUserName());
+		Assert.assertEquals(c.getPassword(), result.getPassword());
 		customerRepo.delete(result);
 	}
 	
@@ -66,9 +66,11 @@ public class CustomerRepositoryTest {
 	
 	@Test
 	public void deleteEmployee() {
+		Customer c = new Customer(2, "unit", "test", "unittest@email.com", "blah", "halb");
+		Customer result = customerRepo.save(c);
 		List<Customer> allCustomers = (List<Customer>) customerRepo.findAll();
 		int sizeBeforeDelete = allCustomers.size();
-		customerRepo.delete(customer);
+		customerRepo.delete(result);
 		allCustomers = (List<Customer>) customerRepo.findAll();
 		int sizeAfterDelete = allCustomers.size();
 		Assert.assertTrue(sizeBeforeDelete - 1 == sizeAfterDelete);
