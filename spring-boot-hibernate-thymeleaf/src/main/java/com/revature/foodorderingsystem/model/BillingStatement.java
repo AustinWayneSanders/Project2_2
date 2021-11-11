@@ -51,6 +51,58 @@ public class BillingStatement implements Serializable{
 		this.unitPrice = unitPrice;
 		this.extendedPrice = extendedPrice;
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getRestaurantName() {
+		return restaurantName;
+	}
+
+	public void setRestaurantName(String restaurantName) {
+		this.restaurantName = restaurantName;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public double getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(double unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+	public double getExtendedPrice() {
+		return extendedPrice;
+	}
+
+	public void setExtendedPrice(double extendedPrice) {
+		this.extendedPrice = extendedPrice;
+	}
+	
+	
+	
+	
 }
 
 
