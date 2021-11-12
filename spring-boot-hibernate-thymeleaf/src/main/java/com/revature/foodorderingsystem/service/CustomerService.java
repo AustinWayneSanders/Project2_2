@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.revature.foodorderingsystem.controller.CustomerController;
 import com.revature.foodorderingsystem.exception.RecordNotFoundException;
 import com.revature.foodorderingsystem.model.Customer;
 import com.revature.foodorderingsystem.repository.CustomerRepository;

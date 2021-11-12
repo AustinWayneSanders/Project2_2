@@ -1,86 +1,137 @@
-//package com.revature.foodorderingsystem.model;
-//
-//import java.util.HashSet;
-//import java.util.List;
-//import java.util.Set;
-//
-//import javax.persistence.CascadeType;
-//import javax.persistence.Column;
-//import javax.persistence.Entity;
-//import javax.persistence.FetchType;
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.GenerationType;
-//import javax.persistence.Id;
-//import javax.persistence.JoinColumn;
-//import javax.persistence.OneToMany;
-//import javax.persistence.Table;
-////import com.revature.foodorderingsystem.model.ListItem;
-//
-//@Entity
-//@Table(name = "product")
-//public class Product {
-//
+package com.revature.foodorderingsystem.model;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+//import com.revature.foodorderingsystem.model.ListItem;
+
+@Entity
+@Table(name = "product")
+public class Product implements Serializable{
+
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="product_id")
+	private long id;
+	
+	@Column(name="product_name")
+	private String productName;
+	
+	@Column(name="restaurant_name")
+	private String restaurantName;
+	
+	@Column(name="unit_price")
+	private double unitPrice;
+	
+	@Column(name="img_url")
+	private String img_url;
+	
+
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name= "billingstatement_id")
+	//@JsonManagedReference
+	private List<BillingStatement> billingStatements;
+	
+	
+	public Product() {
+		super();
+	}
+
+	public Product(String productName, String restaurantName, double unitPrice, String img_url) {
+		super();
+	
+		this.productName = productName;
+		this.restaurantName = restaurantName;
+		this.unitPrice = unitPrice;
+		this.img_url = img_url;
+		
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getRestaurantName() {
+		return restaurantName;
+	}
+
+	public void setRestaurantName(String restaurantName) {
+		this.restaurantName = restaurantName;
+	}
+
+	public double getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(double unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+	public String getImg_url() {
+		return img_url;
+	}
+
+	public void setImg_url(String img_url) {
+		this.img_url = img_url;
+	}
+
+	public List<BillingStatement> getBillingStatements() {
+		return billingStatements;
+	}
+
+	public void setBillingStatments(List<BillingStatement> billingStatements) {
+		this.billingStatements = billingStatements;
+	}
+
+	
+	
+	
+	
+	
+	
+////	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+////	private Set<ListItem> listItems = new HashSet<ListItem>();
 //	
-//	@Id
-//	@GeneratedValue(strategy=GenerationType.AUTO)
-//	@Column(name="product_id")
-//	private long id;
-//	@Column(name="product_name")
-//	private String productName;
-//	@Column(name="unit_price")
-//	private double unitPrice;
+//	@OneToMany(cascade = CascadeType.ALL)
+//	@JoinColumn(name= "billingstatement_id")
+//	private List<BillingStatement> billingStatements;
 //	
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
-//	private Set<ListItem> listItems = new HashSet<ListItem>();
-//	
-////	@OneToMany(cascade = CascadeType.ALL)
-////	@JoinColumn(name= "list_item_id")
-////	private List<ListItem> listItems;
-////	
-//	public Product() {
-//		super();
-//	}
-//
-//	public Product(String productName, double unitPrice) {
-//		super();
-////		this.id = id;
-//		this.productName = productName;
-//		this.unitPrice = unitPrice;
-////		this.listItems = listItems;
-//	}
-//
-//	public long getId() {
-//		return id;
-//	}
-//
-//	public void setId(long id) {
-//		this.id = id;
-//	}
-//
-//	public String getProductName() {
-//		return productName;
-//	}
-//
-//	public void setProductName(String productName) {
-//		this.productName = productName;
-//	}
-//
-//	public double getUnitPrice() {
-//		return unitPrice;
-//	}
-//
-//	public void setUnitPrice(double unitPrice) {
-//		this.unitPrice = unitPrice;
-//	}
-//
-//	public Set<ListItem> getListItems() {
-//		return listItems;
-//	}
-//
-//	public void setListItems(Set<ListItem> listItems) {
-//		this.listItems = listItems;
-//	}
-//
+	
+	
+}
+	
 //	
 //
 //	

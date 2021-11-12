@@ -30,7 +30,7 @@ import com.revature.foodorderingsystem.model.Customer;
 import com.revature.foodorderingsystem.service.BillingStatementService;
 
 
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/billingStatements")
 public class BillingStatementController 
@@ -55,10 +55,12 @@ public class BillingStatementController
 		log.info("In editBillingStatementById()");
 		BillingStatement billingStatement = service.getBillingStatementById(id);
 		
+	
+		
+		billingStatement.setQuantity(billingStatementDetails.getQuantity());
 		billingStatement.setExtendedPrice(billingStatementDetails.getExtendedPrice());
-		billingStatement.setProductName(billingStatementDetails.getProductName());
-		billingStatement.setRestaurantName(billingStatementDetails.getRestaurantName());
-		billingStatement.setUnitPrice(billingStatementDetails.getUnitPrice());
+		billingStatement.setProduct(billingStatementDetails.getProduct());
+		
 		
 		final BillingStatement updateBillingStatement = service.createOrUpdateBillingStatement(billingStatement);
 		return ResponseEntity.ok(updateBillingStatement);

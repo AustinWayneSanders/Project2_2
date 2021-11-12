@@ -1,17 +1,28 @@
 package com.revature.foodorderingsystem.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.revature.foodorderingsystem.model.Product;
 
 import lombok.Data;
 
-@Data
 @Entity
 @Table(name = "billingstatement")
 public class BillingStatement implements Serializable{
@@ -20,89 +31,110 @@ public class BillingStatement implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "billingstatement_id")
 	private long id;
-
-	@Column(name = "restaurant_name")
-	private String restaurantName;
 	
-	@Column(name = "product_name")
-	private String productName;
+	
+//	@ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "product_id")
+//	private Product product ;
+
+
+//	@Column(name = "restaurant_name")
+//	private String restaurantName;
+//	
+//	@Column(name = "product_name")
+//	private String productName;
 	
 	@Column(name="quantity")
 	private int quantity;
 	
-	@Column(name="unit_price")
-	private double unitPrice;
 
 	@Column(name = "extended_price")
 	private double extendedPrice;
 
-
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
+	@JsonIgnore
+	private Product product;
+	
 	public BillingStatement() {
 		super();
 	}
 
-	public BillingStatement(long id, String restaurantName, String productName, int quantity, double unitPrice,
-			double extendedPrice) {
+
+
+
+	public BillingStatement(int quantity, double extendedPrice) {
 		super();
-		this.id = id;
-		this.restaurantName = restaurantName;
-		this.productName = productName;
+	
 		this.quantity = quantity;
-		this.unitPrice = unitPrice;
 		this.extendedPrice = extendedPrice;
+		
 	}
+
+
+
 
 	public long getId() {
 		return id;
 	}
 
+
+
+
 	public void setId(long id) {
 		this.id = id;
 	}
 
-	public String getRestaurantName() {
-		return restaurantName;
-	}
 
-	public void setRestaurantName(String restaurantName) {
-		this.restaurantName = restaurantName;
-	}
 
-	public String getProductName() {
-		return productName;
-	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
 
 	public int getQuantity() {
 		return quantity;
 	}
 
+
+
+
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 
-	public double getUnitPrice() {
-		return unitPrice;
-	}
 
-	public void setUnitPrice(double unitPrice) {
-		this.unitPrice = unitPrice;
-	}
+
 
 	public double getExtendedPrice() {
 		return extendedPrice;
 	}
 
+
+
+
 	public void setExtendedPrice(double extendedPrice) {
 		this.extendedPrice = extendedPrice;
 	}
+
+
+
+
+	public Product getProduct() {
+		return product;
+	}
+
+
+
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+
 	
+
 	
+
 	
-	
+		
 }
 
 

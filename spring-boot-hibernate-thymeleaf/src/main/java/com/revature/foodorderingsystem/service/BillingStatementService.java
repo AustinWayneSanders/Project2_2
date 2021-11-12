@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.revature.foodorderingsystem.controller.CustomerController;
 import com.revature.foodorderingsystem.exception.RecordNotFoundException;
 import com.revature.foodorderingsystem.model.BillingStatement;
 import com.revature.foodorderingsystem.repository.BillingStatementRepository;
@@ -64,12 +63,9 @@ public class BillingStatementService {
 			if(billingStatement.isPresent()) 
 			{
 				BillingStatement newEntity = billingStatement.get();
-				newEntity.setRestaurantName(entity.getRestaurantName());
-				newEntity.setProductName(entity.getProductName());
-				newEntity.setUnitPrice(entity.getUnitPrice());
 				newEntity.setQuantity(entity.getQuantity());
 				newEntity.setExtendedPrice(entity.getExtendedPrice());
-				
+				newEntity.setProduct(entity.getProduct());
 				newEntity = repository.save(newEntity);
 				
 				return newEntity;

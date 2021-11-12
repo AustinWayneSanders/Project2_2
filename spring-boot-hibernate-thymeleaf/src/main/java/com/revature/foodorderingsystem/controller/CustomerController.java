@@ -31,7 +31,7 @@ import com.revature.foodorderingsystem.service.BillingStatementService;
 import com.revature.foodorderingsystem.service.CustomerService;
 
 
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/customers")
 public class CustomerController 
