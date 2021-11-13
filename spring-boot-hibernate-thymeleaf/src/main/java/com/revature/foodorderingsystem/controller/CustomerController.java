@@ -48,6 +48,11 @@ public class CustomerController
 
 	}
 	
+	@GetMapping("/getCustomerById/{id}")
+	public Customer getCustomerById(@PathVariable long id) throws RecordNotFoundException {
+		return service.getCustomerById(id);
+	}
+	
 	@GetMapping("/getCustomerByUserName/{userName}")
 	public Customer getCustomerByUserName(@PathVariable String userName) throws RecordNotFoundException {
 		return service.getCustomerByUserName(userName);
