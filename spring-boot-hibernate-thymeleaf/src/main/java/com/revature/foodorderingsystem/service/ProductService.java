@@ -60,7 +60,7 @@ public class ProductService {
 				newEntity.setProductName(entity.getProductName());
 				newEntity.setUnitPrice(entity.getUnitPrice());
 				newEntity.setImg_url(entity.getImg_url());
-				newEntity.setBillingStatments(entity.getBillingStatements());
+				newEntity.setBillingStatements(entity.getBillingStatements());
 
 				newEntity = repository.save(newEntity);
 				

@@ -49,7 +49,7 @@
 //    @InjectMocks
 //    private BillingStatementController controller;
 //    private JacksonTester<BillingStatement> json; 
-//    private BillingStatement b1 = new BillingStatement(1, "Cosmic Cantina", "Deluxe Veggie Burrito", 2, 8.99, 17.98);
+//    private BillingStatement b1 = new BillingStatement(2,20.0);
 //    private List<BillingStatement> mockStmts = new ArrayList<>();
 //    
 //    @Before

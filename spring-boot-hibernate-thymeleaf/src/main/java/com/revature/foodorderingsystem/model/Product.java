@@ -21,8 +21,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import lombok.Data;
 //import com.revature.foodorderingsystem.model.ListItem;
 
+@Data
 @Entity
 @Table(name = "product")
 public class Product implements Serializable{
@@ -66,54 +69,56 @@ public class Product implements Serializable{
 		this.img_url = img_url;
 		
 	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getProductName() {
-		return productName;
-	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
-
-	public String getRestaurantName() {
-		return restaurantName;
-	}
-
-	public void setRestaurantName(String restaurantName) {
-		this.restaurantName = restaurantName;
-	}
-
-	public double getUnitPrice() {
-		return unitPrice;
-	}
-
-	public void setUnitPrice(double unitPrice) {
-		this.unitPrice = unitPrice;
-	}
-
-	public String getImg_url() {
-		return img_url;
-	}
-
-	public void setImg_url(String img_url) {
-		this.img_url = img_url;
-	}
-
-	public List<BillingStatement> getBillingStatements() {
-		return billingStatements;
-	}
-
-	public void setBillingStatments(List<BillingStatement> billingStatements) {
-		this.billingStatements = billingStatements;
-	}
+	
+	/** Don't need to manually create getters & setters. Lombok's @Data annotation on the class does this for us */
+//
+//	public long getId() {
+//		return id;
+//	}
+//
+//	public void setId(long id) {
+//		this.id = id;
+//	}
+//
+//	public String getProductName() {
+//		return productName;
+//	}
+//
+//	public void setProductName(String productName) {
+//		this.productName = productName;
+//	}
+//
+//	public String getRestaurantName() {
+//		return restaurantName;
+//	}
+//
+//	public void setRestaurantName(String restaurantName) {
+//		this.restaurantName = restaurantName;
+//	}
+//
+//	public double getUnitPrice() {
+//		return unitPrice;
+//	}
+//
+//	public void setUnitPrice(double unitPrice) {
+//		this.unitPrice = unitPrice;
+//	}
+//
+//	public String getImg_url() {
+//		return img_url;
+//	}
+//
+//	public void setImg_url(String img_url) {
+//		this.img_url = img_url;
+//	}
+//
+//	public List<BillingStatement> getBillingStatements() {
+//		return billingStatements;
+//	}
+//
+//	public void setBillingStatments(List<BillingStatement> billingStatements) {
+//		this.billingStatements = billingStatements;
+//	}
 
 	
 	
