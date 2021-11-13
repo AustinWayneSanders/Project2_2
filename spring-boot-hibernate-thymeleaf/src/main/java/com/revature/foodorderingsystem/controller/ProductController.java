@@ -49,13 +49,13 @@ public class ProductController
 
 	}
 	
-//	@GetMapping("/getCustomerByUserName/{userName}")
-//	public Customer getCustomerByUserName(@PathVariable String userName) throws RecordNotFoundException {
-//		return service.getCustomerByUserName(userName);
-//	}
+	@GetMapping("/getProductById/{id}")
+	public Product getProductById(@PathVariable long id) throws RecordNotFoundException {
+		return service.getProductById(id);
+	}
 			
 	@PutMapping(path = {"/editProduct/{id}"})
-	public ResponseEntity<Product> editCustomerById(@PathVariable(value = "id") Long id, @Valid @RequestBody Product productDetails) 
+	public ResponseEntity<Product> editProductById(@PathVariable(value = "id") Long id, @Valid @RequestBody Product productDetails) 
 							throws RecordNotFoundException 
 	{
 		log.info("In editProductById()");
