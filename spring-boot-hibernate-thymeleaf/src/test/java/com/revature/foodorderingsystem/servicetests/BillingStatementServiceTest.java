@@ -33,7 +33,6 @@ public class BillingStatementServiceTest {
 	@Mock
     private BillingStatementRepository repository;
 	private BillingStatement b1 = new BillingStatement(3, 12.75);
-	private BillingStatement b2 = new BillingStatement(1, 6.50);
     @Autowired
     @InjectMocks
     BillingStatementService service;
@@ -41,6 +40,7 @@ public class BillingStatementServiceTest {
     @Before
     public void setUp() {
     	MockitoAnnotations.initMocks(this);
+    	b1.setId((long) 1);
     }
     
     @Test
@@ -85,12 +85,8 @@ public class BillingStatementServiceTest {
     	
     	//////////////////// Test on non-empty db ////////////////////
         Optional<BillingStatement> optB1 = Optional.of(b1);
-        Optional<BillingStatement> optB2 = Optional.of(b2);
     	when(repository.findById(b1.getId())).thenReturn(optB1);
-    	when(repository.findById(b2.getId())).thenReturn(optB2);
 		BillingStatement result = service.getBillingStatementById(b1.getId());
-		System.out.println(b1.getId());
-		System.out.println(b2.getId()+ "\n\n\n\n\n");
 	    Assert.assertNotNull(result);
         Assert.assertEquals(result.toString(), b1.toString());
 
@@ -104,7 +100,7 @@ public class BillingStatementServiceTest {
     }
     
     @Test
-    public void testDeleteBillingStatementById() {
+    public void testDeleteBillingStatementById() throws RecordNotFoundException {
     	//////////////////// Test on empty db ////////////////////
     	try {
 			service.deleteBillingStatementById((long) 1);
@@ -116,24 +112,15 @@ public class BillingStatementServiceTest {
     	// mocking billing statement methods
     	List<BillingStatement> billStmts = new ArrayList<BillingStatement>();
     	billStmts.add(b1);
-    	billStmts.add(b2);
-    	
-    	// mocking repo methods
+        Optional<BillingStatement> optB1 = Optional.of(b1);
+    	when(repository.findById(b1.getId())).thenReturn(optB1);
       	doAnswer(invocation -> {
       		billStmts.remove(b1);
       		return null;
-      	}).when(repository).deleteById((long) 1);
-      	
-      	// call deleteById
-      	try {
-      		service.deleteBillingStatementById((long) 1);
-      		
-      		// assert expected results
-      		Assert.assertFalse(billStmts.contains(b1));
-      	} catch (RecordNotFoundException e) {
-      		e.printStackTrace();
-      	}
-    	
+      	}).when(repository).deleteById(b1.getId());
+      	service.deleteBillingStatementById(b1.getId());
+        Assert.assertFalse(billStmts.contains(b1));
+        
     	//////////////////// Test on non-empty db for non-existent billing statement ////////////////////
       	try {
       		service.deleteBillingStatementById((long) 1);

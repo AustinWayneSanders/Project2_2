@@ -32,13 +32,11 @@ import com.revature.foodorderingsystem.service.CustomerService;
 public class CustomerServiceTest {
 	
 	@Mock
-    private CustomerRepository customerRepo;
-	private Customer c1 = new Customer(1, "Holly", "Larsen", "hollar@email.com", "holly11", "l@r$3n");
-	private Customer c2 = new Customer(2, "Nancy", "Selfridge", "nansel@email.com", "nancy22", "$3lfridg3");
-    
+    private CustomerRepository repository;
+	private Customer c1 = new Customer(1, "Holly", "Larsen", "hollar@email.com", "holly11", "l@r$3n"); 
     @Autowired
     @InjectMocks
-    CustomerService customerService;
+    CustomerService service;
     
     @Before
     public void setUp() {
@@ -48,13 +46,8 @@ public class CustomerServiceTest {
     
     @Test
     public void testCreateOrUpdateCustomer() {
-    	// mocking customer repository method
-    	when(customerRepo.save(c1)).thenReturn(c1);
-    	
-    	// call createOrUpdateCustomer
-    	Customer result = customerService.createOrUpdateCustomer(c1);
-    	
-    	// Assert expected results
+    	when(repository.save(c1)).thenReturn(c1);
+    	Customer result = service.createOrUpdateCustomer(c1);
     	Assert.assertNotNull(result);
         Assert.assertEquals(result.toString(), c1.toString());
     }
@@ -62,29 +55,16 @@ public class CustomerServiceTest {
     @Test
 	public void testGetAllCustomers() {
 		//////////////////// Test for empty array when nothing in db //////////////////
-		// mock repo method
-		when((List<Customer>) customerRepo.findAll()).thenReturn(new ArrayList<Customer>());
-		
-		// call getAllCustomers
-	    List<Customer> result = customerService.getAllCustomers();
-	    
-	    // assert expected results
+		when((List<Customer>) repository.findAll()).thenReturn(new ArrayList<Customer>());
+	    List<Customer> result = service.getAllCustomers();
 	    Assert.assertNotNull(result);
 	    Assert.assertTrue(result.size() == 0);
 	    
 	    //////////////////// Test on non-empty db //////////////////// 	
-		// build mock db & mock customer methods
 		List<Customer> customers = new ArrayList<Customer>();
 		customers.add(c1);
-		customers.add(c2);
-		
-		// mocking customer repository method
-		when(customerRepo.findAll()).thenReturn(customers);
-		
-		// call getAllCustomers
-		result = customerService.getAllCustomers();
-	
-	    // Assert expected results
+		when(repository.findAll()).thenReturn(customers);
+		result = service.getAllCustomers();
 		Assert.assertNotNull(result);
 		Assert.assertTrue(result.size() == customers.size());
 		for (int i = 0; i < result.size(); i++) {
@@ -95,75 +75,55 @@ public class CustomerServiceTest {
 	}
     
     @Test
-    public void testGetCustomerById() {
+    public void testGetCustomerById() throws RecordNotFoundException {
     	//////////////////// Test for exception on empty db ////////////////////
     	try {
-			customerService.getCustomerById((long) 1);
+			service.getCustomerById((long) 1);
 		} catch (RecordNotFoundException e) {
 			Assert.assertEquals(e.getMessage(), "No customer record exist for given id");
 		}
     	
     	//////////////////// Test on non-empty db ////////////////////
-    	// mocking customer repository method
         Optional<Customer> c = Optional.of(c1);
-    	when(customerRepo.findById((long) 1)).thenReturn(c);
-    	c = Optional.of(c2);
-    	when(customerRepo.findById((long) 2)).thenReturn(c);
-    	
-    	// call getCustomerById
+    	when(repository.findById((long) 1)).thenReturn(c);
     	Customer result;
-    	try {
-		    result = customerService.getCustomerById(c1.getId());
-		    
-	    	// assert expected results
-	    	Assert.assertNotNull(result);
-	        Assert.assertEquals(c1.toString(), result.toString());
-		} catch (RecordNotFoundException e) {
-			e.printStackTrace();
-		}
-    
+		result = service.getCustomerById(c1.getId());
+	    Assert.assertNotNull(result);
+	    Assert.assertEquals(c1.toString(), result.toString());
+
+
         //////////////////// Test on non-empty db for non-existent user ////////////////////
 	    try {
-		    customerService.getCustomerById((long) 2);
+		    service.getCustomerById((long) 2);
 	    } catch (RecordNotFoundException e) {
 		    Assert.assertEquals(e.getMessage(), "No customer record exist for given id");
 	    }
     }
     
     @Test
-    public void testDeleteCustomerById() {
+    public void testDeleteCustomerById() throws RecordNotFoundException {
     	//////////////////// Test on empty db ////////////////////
     	try {
-			customerService.deleteCustomerById((long) 1);
+			service.deleteCustomerById((long) 1);
 		} catch (RecordNotFoundException e) {
 			Assert.assertEquals(e.getMessage(), "No customer record exist for given id");
 		}
     	
     	//////////////////// Test on non-empty db ///////////////////
-    	// mocking customer methods
     	List<Customer> customers = new ArrayList<Customer>();
     	customers.add(c1);
-    	customers.add(c2);
-    	
-    	// mocking repo methods
+    	Optional<Customer> optC1 = Optional.of(c1);
+        when(repository.findById(c1.getId())).thenReturn(optC1);
       	doAnswer(invocation -> {
       		customers.remove(c1);
       		return null;
-      	}).when(customerRepo).deleteById((long) 1);
+      	}).when(repository).deleteById(c1.getId());
+      	service.deleteCustomerById(c1.getId());
+      	Assert.assertFalse(customers.contains(c1));
       	
-      	// call deleteById
-      	try {
-      		customerService.deleteCustomerById((long) 1);
-      		
-      		// assert expected results
-      		Assert.assertFalse(customers.contains(c1));
-      	} catch (RecordNotFoundException e) {
-      		e.printStackTrace();
-      	}
-    	
     	//////////////////// Test on non-empty db for non-existent user ////////////////////
       	try {
-      		customerService.deleteCustomerById((long) 1);
+      		service.deleteCustomerById((long) 2);
       	} catch (RecordNotFoundException e) {
       		Assert.assertEquals(e.getMessage(), "No customer record exist for given id");
       	}
@@ -171,16 +131,25 @@ public class CustomerServiceTest {
     
     @Test
     public void testGetCustomerByUserName() throws RecordNotFoundException {
-		List<Customer> customers = new ArrayList<Customer>();
-		customers.add(c1);
-		customers.add(c2);
-		
-		when(customerRepo.findAll()).thenReturn(customers);
-		
-		Customer result = customerService.getCustomerByUserName(c1.getUserName());
-		
+    	//////////////////// Test for exception on empty db /////////////////////
+    	try {
+			service.getCustomerByUserName(c1.getUserName());
+		} catch (RecordNotFoundException e) {
+			Assert.assertEquals(e.getMessage(), "No customer record exist for given user name");
+		}
+    	
+    	
+    	//////////////////// Test for non empty db ////////////////////
+		when(repository.findByUserName(c1.getUserName())).thenReturn(c1);
+		Customer result = service.getCustomerByUserName(c1.getUserName());
 		Assert.assertEquals(result.toString(), c1.toString());
 		
+		//////////////////// Test for exception for on nonexistent username ////////////////////
+    	try {
+			service.getCustomerByUserName("fake username");
+		} catch (RecordNotFoundException e) {
+			Assert.assertEquals(e.getMessage(), "No customer record exist for given user name");
+		}
 		
     }
 }
